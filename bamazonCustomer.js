@@ -21,9 +21,9 @@ function displayInventory() {
         if (err) throw err;
         for (var i = 0; i < res.length; i++) {
             console.log("Item Id: " + res[i].item_id + "\n",
-                "Product: " + res[i].product_name + "\n",
+                "Product name: " + res[i].product_name + "\n",
                 "Department: " + res[i].department_name + "\n",
-                "Price: " + res[i].price + "\n",
+                "Price ($): " + res[i].price + "\n",
                 "Quantity left in stock: " + res[i].stock_quantity + "\n",
                 "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- \n"
             )
@@ -31,7 +31,7 @@ function displayInventory() {
         whatToBuy();
         // console.log(res);
     })
-   
+
 }
 
 function whatToBuy() {
@@ -39,7 +39,7 @@ function whatToBuy() {
     inquirer.prompt([{
             type: "input",
             message: "What is the item ID that you want to purchase",
-            name: "itemId",
+            name: "item_id",
             validate: function (value) {
                 if (isNaN(value)) {
                     return false;
@@ -60,15 +60,45 @@ function whatToBuy() {
                 }
             }
         }
-    ]).then(function(res){
-        if (res.stock_quantity>= res.quantity){
-            console.log("this is: ",res.stock_quantity);
-            console.log("this is: ",res.quantity);
-            console.log("There are enough for you to purchase? \n");
-            // updateQuantity();
-        }
-        else{
-            console.log("Insufficient quantity!");
-        }
+    ]).then(function (buy) {
+        connection.query("SELECT * FROM products WHERE ?", {
+            item_id: buy.item_id
+        }, function (err, res) {
+            if (err) throw err;
+            if (buy.item_id > 0) {
+                if (res[0].stock_quantity >= buy.quantity) {
+
+                    console.log("\n There are enough of this item in stock for you to purchase! \n",
+                        "You owe $", (res[0].price * buy.quantity));
+
+                    function updateQuantity() {
+                        var newQuantity = (res[0].stock_quantity - buy.quantity)
+                        connection.query("UPDATE products SET ? WHERE ?", [{
+                                stock_quantity: newQuantity
+                            },
+                            {
+                                item_id: buy.item_id
+                            }
+                        ], function (err) {
+                            if (err) throw err;
+
+                            console.log("After your purchase there are ", newQuantity, " stock left of ", res[0].product_name, " after your purchase \n")
+                            console.log("Thank you for yuor purchase! come back soon! \n")
+                            console.log("Please enter 'node bamazonCustomer.js' to begin a new transaction!");
+                            connection.end();
+                        })
+                    }
+                    updateQuantity();
+                } else {
+                    console.log("Insufficient quantity! Let's look at a different item or a smaller quantity!");
+                    console.log("Please enter 'node bamazonCustomer.js' to begin a new transaction!");
+                    connection.end();
+                }
+            } else {
+                console.log("Please enter avalid item number from the items listed above");
+                console.log("Please enter 'node bamazonCustomer.js' to begin a new transaction!");
+                connection.end();
+            }
+        })
     })
-};
+}
