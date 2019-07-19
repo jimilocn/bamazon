@@ -69,11 +69,10 @@ connection.connect(function (err) {
     function lowInventory() {
         connection.query("SELECT * FROM products WHERE stock_quantity <10", function (err, res) {
             if (err) throw err;
-            if (res) {
+            if (res.length === 0) {
                 console.log("There are currently no items below the 10 item minimum threshold!");
                 returnToMenu();
-            }
-            else {
+            } else {
 
                 console.log("\n\n" + "These are the items currently with stock quantity less than 10: \n");
 
@@ -195,7 +194,7 @@ connection.connect(function (err) {
                 product_name: new_item.new_name
             }, function (err, res) {
                 if (err) throw err;
-                if (res[0].product_name != new_item.new_name) {
+                if (res.length === 0) {
                     connection.query("insert into products set ?", [{
                         product_name: new_item.new_name,
                         department_name: new_item.new_department,

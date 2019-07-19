@@ -17,7 +17,8 @@ connection.connect(function (err) {
 });
 
 function displayInventory() {
-    console.log("these are the items currently available: \n");
+    console.log("Hello! Welcome to Bamazon! \n")
+    console.log("These are the items currently available: \n");
     connection.query("SELECT * FROM products", function (err, res) {
         if (err) throw err;
         console.table(res);
@@ -28,7 +29,27 @@ function displayInventory() {
 }
 
 function whatToBuy() {
-    console.log("What do you want to buy today? \n");
+    inquirer.prompt([{
+        type: "list",
+        message: "Would you like to purchase anything tody?",
+        choices: ["Yes! I see something that I want", "No thank you. I do not see anything that I want"],
+        name: "userPick"
+    }]).then(function (res) {
+        switch (res.userPick) {
+            case "Yes! I see something that I want":
+                purchase();
+                break;
+            case "No thank you. I do not see anything that I want":
+                console.log("Not a problem! See again soon!");
+                connection.end();
+                break;
+
+        }
+    })
+
+}
+
+function purchase() {
     inquirer.prompt([{
             type: "input",
             message: "What is the item ID that you want to purchase",
@@ -75,7 +96,7 @@ function whatToBuy() {
                         ], function (err) {
                             if (err) throw err;
 
-                            console.log("After your purchase there are ", newQuantity, " stock left of ", res[0].product_name, " after your purchase \n")
+                            console.log("After your purchase there are ", newQuantity, " stock left of ", res[0].product_name, "\n")
                             console.log("Thank you for yuor purchase! come back soon! \n")
                             console.log("Please enter 'node bamazonCustomer.js' to begin a new transaction!");
                             connection.end();
