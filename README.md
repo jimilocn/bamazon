@@ -1,8 +1,11 @@
-# bamazon
+# Bamazon
 NorthWestern University Coding Bootcamp "Bamazon" Assignment
 
 ## Overview
 This program was created in the Northwestern University Coding Bootcamp 2019. It is a command line storefront for purchasing items on the customer side, and for managing inventory on the management side. This program challenges the user to accomplish different terminal based commands using Node JS. This program uses MySQL for dynamic data CRUD operations.
+
+### Link to the video demo of the app
+*  
 
 
 ## Bamazon Customer Functions
@@ -27,16 +30,19 @@ Customers are able to access all items within the store inventory and request a 
 *This will allow the manager to redefine the amount of stock each item has. The function is able to search for the seed of data from MySQL and update the particular stock quantity based on the manager's item id input. The function will then show the new quantity and prompt the manager to log out or go back to the menu.
 
 #### Add New Product
-* this searches within the random.txt file for the function to be run within the LIRI Bot
+* This function will look at the manager's request to add a new item, and if the item already exists, there will be a message telling the manager that. If there is no item like that already in the database, the price, department, name, and quantity will all be inserted into the MySQL database. The manager will then be prompted to log out or go back to the main menu
 
 
-### Technologies used in this project
+## Technologies used in this project
 
 - javascript
 - jQuery
 - Node JS
+- JSON
+- npm inquirer
+- npm console.table
+- MySQL
 
 
 
-# Link to the video demo of the app
-*  https://youtu.be/qj7YG1Z_xIk
+
