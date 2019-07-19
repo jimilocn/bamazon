@@ -1,5 +1,6 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
+var cTable = require("console.table");
 
 var connection = mysql.createConnection({
     host: "localhost",
@@ -19,15 +20,7 @@ function displayInventory() {
     console.log("these are the items currently available: \n");
     connection.query("SELECT * FROM products", function (err, res) {
         if (err) throw err;
-        for (var i = 0; i < res.length; i++) {
-            console.log("Item Id: " + res[i].item_id + "\n",
-                "Product name: " + res[i].product_name + "\n",
-                "Department: " + res[i].department_name + "\n",
-                "Price ($): " + res[i].price + "\n",
-                "Quantity left in stock: " + res[i].stock_quantity + "\n",
-                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- \n"
-            )
-        }
+        console.table(res);
         whatToBuy();
         // console.log(res);
     })
