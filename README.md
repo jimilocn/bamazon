@@ -5,7 +5,7 @@ NorthWestern University Coding Bootcamp "Bamazon" Assignment
 This program was created in the Northwestern University Coding Bootcamp 2019. It is a command line storefront for purchasing items on the customer side, and for managing inventory on the management side. This program challenges the user to accomplish different terminal based commands using Node JS. This program uses MySQL for dynamic data CRUD operations.
 
 ### Link to the video demo of the app
-*  
+*  https://youtu.be/TNq7NT4ZN6w
 
 
 ## Bamazon Customer Functions
